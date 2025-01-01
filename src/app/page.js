@@ -1,30 +1,34 @@
 'use client';
 
- // any component that uses useAuth needs this because if a component directly imports useAuth, it needs to be a client component since useAuth uses React hooks.
+// any component that uses useAuth needs this because if a component directly imports useAuth, it needs to be a client component since useAuth uses React hooks.
 
 import { Button } from 'react-bootstrap';
-import { signOut } from '@/utils/auth'; // anything in the src dir, you can use the @ instead of relative paths
 import { useAuth } from '@/utils/context/authContext';
+import { useState } from 'react';
+import BingoCard from '../components/BingoCard';
 
 function Home() {
   const { user } = useAuth();
+  const [bingoCard, setBingoCard] = useState('');
+
+  const getBingoCard = () => {
+    setBingoCard(
+      <BingoCard />,
+    );
+  };
+
+  const callNumber = () => {
+    console.warn('testing 1 2 3');
+  };
 
   return (
-    <div
-      className="text-center d-flex flex-column justify-content-center align-content-center"
-      style={{
-        height: '90vh',
-        padding: '30px',
-        maxWidth: '400px',
-        margin: '0 auto',
-      }}
-    >
-      <h1>Hello {user.displayName}! </h1>
-      <p>Click the button below to logout!</p>
-      <Button variant="danger" type="button" size="lg" className="copy-btn" onClick={signOut}>
-        Sign Out
-      </Button>
-    </div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px', width: '100%' }}>
+        <div>
+          <h1>Hey, {user.displayName}! Let&apos;s Play Bingo!</h1>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '45px', marginBottom: '15px' }}>{bingoCard}</div>
+        </div>
+        <Button onClick={bingoCard === '' ? getBingoCard : callNumber}>{bingoCard === '' ? 'Get a Card' : 'Call a Number'}</Button>
+      </div>
   );
 }
 

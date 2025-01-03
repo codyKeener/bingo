@@ -11,7 +11,6 @@ function Column({ letter, number1, number2 }) {
         numbers.push(parseInt(number, 10));
       }
     }
-    numbers.sort((a, b) => a - b);
 
     if (letter === 'N' || letter === 'n') {
       numbers[2] = 'FREE';
@@ -24,11 +23,16 @@ function Column({ letter, number1, number2 }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100px', height: '600px' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'end', width: '100px', height: '65px', fontSize: '35px' }}>{letter}</div>
-        {bingoNumbers.map((number) => (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100px', height: '100px', border: '2px solid white', fontSize: '35px' }}>{number}</div>
-        ))}
-      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'end', width: '100px', height: '65px', fontSize: '38px', borderBottom: '1px solid white' }}>{letter}</div>
+      {bingoNumbers.map((number, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <div key={`${letter}-${index}`} id={`${letter}-${index}`} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100px', height: '100px', border: '2px solid white', fontSize: '35px' }}>
+          <div key={`${number}-stamp`} id={`${number}-stamp`} className={number === 'FREE' ? 'called-number' : ''}>
+            {number}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 

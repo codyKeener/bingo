@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap';
 import { useAuth } from '@/utils/context/authContext';
 import { useState } from 'react';
 import BingoCard from '../components/BingoCard';
+import CalledNumberTable from '../components/CalledNumberTable';
 
 function Home() {
   const { user } = useAuth();
@@ -15,9 +16,16 @@ function Home() {
   const [stampedBoxes, setStampedBoxes] = useState(['N-2']);
   const [win, setWin] = useState(true);
   const [buttonText, setButtonText] = useState('Get a Bingo Card');
+  const [table, setTable] = useState('');
 
   const getBingoCard = () => {
     setBingoCard(<BingoCard />);
+    setTable(
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '16px', width: '30%', paddingRight: '50px' }}>
+        <h2>Called Numbers</h2>
+        <CalledNumberTable />
+      </div>,
+    );
     // GET RID OF STAMPS IF PLAYING AGAIN
     for (let i = 0; i < calledBingoNumbers.length; i++) {
       const number = `${calledBingoNumbers[i]}-stamp`;
@@ -72,6 +80,11 @@ function Home() {
       if (!calledBingoNumbers.includes(number)) {
         setCalledBingoNumbers((prevState) => [...prevState, number]);
 
+        // STAMP CALLED NUMBERS TABLE
+        const tableStamp = `${number}-stamp-table`;
+        const tableBox = document.getElementById(tableStamp);
+        tableBox.classList.add('called-number');
+
         if (number <= 15) {
           setCurrentBingoNumber(<h1>B{number}</h1>);
         } else if (number > 15 && number <= 30) {
@@ -84,8 +97,10 @@ function Home() {
           setCurrentBingoNumber(<h1>O{number}</h1>);
         }
 
+        // STAMP BINGO CARD
         const numStamp = `${number}-stamp`;
         const box = document.getElementById(numStamp);
+
         if (box) {
           box.classList.add('called-number');
           const boxParent = box.parentElement.id;
@@ -111,12 +126,15 @@ function Home() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '10px', width: '100%' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-        <div>{currentBingoNumber}</div>
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '15px' }}>{bingoCard}</div>
+    <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '10px', width: '70%', paddingLeft: table === '' ? '0px' : '400px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+          <div>{currentBingoNumber}</div>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '15px' }}>{bingoCard}</div>
+        </div>
+        <Button onClick={handleClick}>{buttonText}</Button>
       </div>
-      <Button onClick={handleClick}>{buttonText}</Button>
+      {table}
     </div>
   );
 }

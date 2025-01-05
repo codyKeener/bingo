@@ -29,9 +29,14 @@ function Home() {
     // GET RID OF STAMPS IF PLAYING AGAIN
     for (let i = 0; i < calledBingoNumbers.length; i++) {
       const number = `${calledBingoNumbers[i]}-stamp`;
+      const tableNumber = `${calledBingoNumbers[i]}-stamp-table`;
       const box = document.getElementById(number);
+      const tableBox = document.getElementById(tableNumber);
       if (box) {
         box.classList.remove('called-number');
+      }
+      if (tableBox) {
+        tableBox.classList.remove('called-number');
       }
     }
     // RESET GAME
